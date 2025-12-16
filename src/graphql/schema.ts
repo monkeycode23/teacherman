@@ -12,14 +12,46 @@ type Tag {
     
   }
 
+  type Topic {
+    _id: ID!
+    title: String!
+    description:String
+    comments:[String]
+    resources:[String]
+    quizzes:[String]
+    events:[String]
+    text:String
+    
+    
+  }
+  type Teacher {
+  _id: ID!
+  fullname:String
+    user: ID!
+  
+  }
 
-type Project {
+
+  type ClassroomStats {
+    topics:Int
+    assignments:Int
+    students:Int
+  }
+type Classroom {
     _id: ID!
     name: String
     description: String
     tags:[Tag]
+    subject:String
+    teacher:Teacher
+    color:String
+    students:[String]
+    topics:[String]
+    assignments:[String]
+    stats:ClassroomStats
+    }
 
-  }
+
     type User{
         _id:ID!
         avatar:String
@@ -32,18 +64,10 @@ type Project {
 
 
   type Query {
-
-  projectTags(projectId: ID!): [Tag]
-  projects(userId: ID!): [Project]
-
+   getClassroom(classroomId: ID!): Classroom
+  getClassrooms(teacherId: ID!): [Classroom]
+  getClassroomTopics(classroomId: ID!): [Topic]
   user(userId:ID!):User
   }
 
-  type Mutation {
-    createProject(name: String!, description: String): Project
-  }
-
-  type Subscription {
-    projects: [Project]
-  }
 `;

@@ -1,7 +1,7 @@
 import { Router } from "express";
 
 import { authRequired } from "../middlewares/auth.middleware";
-import projectController from "../controllers/project.controller";
+//import projectController from "../controllers/project.controller";
 import { validateRequest } from "../middlewares/validator.middleware";
 import { requireRole } from "../middlewares/role.middleware";
 

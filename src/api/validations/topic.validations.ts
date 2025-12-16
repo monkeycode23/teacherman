@@ -2,28 +2,24 @@ import { body } from "express-validator";
 import { User } from "../models/User.model";
 
 
-export const    createClassRoomValidationRules = [
+export const    createTopicValidationRules = [
    
-    body("name")
+    body("title")
     .notEmpty()
     .withMessage("El nombre es obligatorio")
     .isLength({ min: 3 })
     .withMessage("El nombre debe tener al menos 3 caracteres")
-    .isLength({ max: 15 })
+    .isLength({ max: 50})
     .withMessage("El nombre debe tener al menos 15 caracteres"),
-     body("subject")
+     body("description")
     .notEmpty()
     .withMessage("El nombre es obligatorio")
     .isLength({ min: 3 })
     .withMessage("El nombre debe tener al menos 3 caracteres")
-    .isLength({ max: 15 })
+    .isLength({ max: 200 })
     .withMessage("El nombre debe tener al menos 15 caracteres"),
     
-    body("color")
-      .notEmpty()
-      .withMessage("el color es obligatorio")
-      
-    
+ 
    
   ]
 

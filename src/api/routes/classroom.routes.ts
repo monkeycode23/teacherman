@@ -1,23 +1,13 @@
 import { Router } from "express";
 
 import { authRequired } from "../middlewares/auth.middleware";
-import projectController from "../controllers/project.controller";
+//import projectController from "../controllers/project.controller";
 import { validateRequest } from "../middlewares/validator.middleware";
 import { requireRole } from "../middlewares/role.middleware";
 import { createProjectValidationRules } from "../validations/project.validations";
-import { createTagValidationRules } from "../validations/tag.validations";
-import TagController from "../controllers/tag.controller";
-
+import { createClassRoomValidationRules } from "../validations/tag.validations";
+import classRoomController from "../controllers/class.room.controller";
 const router = Router();
-
-
-
-
-router.get(
-    "/",
-    authRequired,
-    //requireRole("admin"),
-    TagController.getAction());
 
 
 
@@ -26,9 +16,9 @@ router.post(
     "/",
     authRequired,
     //requireRole("admin"),
-    createTagValidationRules,
+    createClassRoomValidationRules,
     validateRequest,
-    TagController.createAction());
+    classRoomController.createAction());
 
 
     
@@ -36,9 +26,9 @@ router.put(
     "/",
     authRequired,
     //requireRole("admin"),
-    createProjectValidationRules,
-    validateRequest,
-    TagController.createAction());
+   /*  createProjectValidationRules,
+    validateRequest, */
+    classRoomController.createAction());
 
 
 
@@ -47,9 +37,9 @@ router.delete(
     "/",
     authRequired,
     //requireRole("admin"),
-    createProjectValidationRules,
-    validateRequest,
-    TagController.createAction());
+    /* createProjectValidationRules,
+    validateRequest, */
+    classRoomController.createAction());
 
 
 
