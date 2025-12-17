@@ -143,11 +143,107 @@ const AddResourceForm = ({
   newMaterial,
   setAddingMaterial,
 }: any) => {
+  const [progress, setProgress] = useState(0);
+
+  const handleUpload = async (file: File) => {
+    const result = await uploadWithProgress(file, setProgress);
+    console.log(result.secure_url);
+  };
+
+  const uploadWithProgress = (
+    file: File,
+    onProgress: (percent: number) => void
+  ): Promise<any> => {
+    return new Promise((resolve, reject) => {
+      const xhr = new XMLHttpRequest();
+      const formData = new FormData();
+
+      formData.append("file", file);
+      formData.append("upload_preset", "TU_UPLOAD_PRESET");
+
+      xhr.open("POST", "https://api.cloudinary.com/v1_1/drupdbsp4/auto/upload");
+
+      // 🔥 progreso real
+      xhr.upload.onprogress = (event) => {
+        if (event.lengthComputable) {
+          const percent = Math.round((event.loaded / event.total) * 100);
+          onProgress(percent);
+        }
+      };
+
+      xhr.onload = () => {
+        if (xhr.status >= 200 && xhr.status < 300) {
+          resolve(JSON.parse(xhr.responseText));
+        } else {
+          reject(new Error("Upload failed"));
+        }
+      };
+
+      xhr.onerror = () => reject(new Error("Network error"));
+
+      xhr.send(formData);
+    });
+  };
+
+  const uploadSigned = async (file:any) => {
+    const { signature, timestamp, cloudName, apiKey } = await fetch(
+      "/api/cloudinary/sign"
+    ).then((r) => r.json());
+
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("api_key", apiKey);
+    formData.append("timestamp", timestamp);
+    formData.append("signature", signature);
+    formData.append("folder", "teacherman/resources");
+
+    const res = await fetch(
+      `https://api.cloudinary.com/v1_1/${cloudName}/auto/upload`,
+      {
+        method: "POST",
+        body: formData,
+      }
+    );
+
+    return res.json();
+  };
   return (
     <form
       onSubmit={handleAddMaterial}
       className="mb-4 p-4 bg-gray-50 rounded-lg"
     >
+     {/*  <div className="w-full bg-gray-200 rounded">
+        <div
+          className="bg-blue-500 h-2 rounded transition-all"
+          style={{ width: `${progress}%` }}
+        />
+      </div>
+
+      <p>{progress}%</p> */}
+
+
+  {/*     <input
+  type="file"
+  multiple
+  onChange={(e) => e.target.files && uploadFiles(e.target.files)}
+/> */}
+
+{/* {uploads.map((u) => (
+  <div key={u.id}>
+    <p>{u.file.name}</p>
+
+    <div className="w-full bg-gray-200 h-2 rounded">
+      <div
+        className="bg-blue-500 h-2 rounded"
+        style={{ width: `${u.progress}%` }}
+      />
+    </div>
+
+    {u.status === "uploading" && (
+      <button onClick={() => cancelUpload(u.id)}>Cancelar</button>
+    )}
+  </div>
+))} */}
       <div className="space-y-3">
         <div>
           <label className="block text-sm text-gray-700 mb-2">Tipo</label>

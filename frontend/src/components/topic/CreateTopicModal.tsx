@@ -25,6 +25,8 @@ const classroomStore = useClassroomsStore();
     if(!classroomStore.classroom) return;
     if (!authStore.user) return;
 
+    formStore.resetForm()
+    
     formStore.loading = false;
   
     formStore.setValue("title", "");

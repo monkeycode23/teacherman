@@ -24,7 +24,7 @@ interface ResourcesState {
   ) => void;
   removeResource: (id: string) => void;
    setResources:(resources:Material[])=>void;
-  getResourcesByTopic: (topicId: string) => MaterialWithTopic[];
+  getResourcesByTopic: (topicId: string) => Material[];
 }
 
 export const useResourcesStore = create<ResourcesState>((set, get) => ({
@@ -66,5 +66,5 @@ export const useResourcesStore = create<ResourcesState>((set, get) => ({
   },
 
   getResourcesByTopic: (topicId) =>
-    get().resources.filter((r) => r.topicId === topicId),
+    get().resources.filter((r) => r.id === topicId),
 }));

@@ -44,7 +44,6 @@ class LoginAction {
     }
   }
 
-
    async authenticate(email: string, password: string) {
     //validamos q exista el usuario
     const user = await User.findOne({ email }).select(`

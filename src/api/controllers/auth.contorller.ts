@@ -12,10 +12,7 @@ class AuthController {
 
     private actionHandler:any
     
-    constructor(){
-
-    }
-
+    constructor(){}
 
     loginAction(){
 
@@ -72,9 +69,7 @@ class AuthController {
         return this.actionHandler
     
     } 
-
-
-
+    
     resendAction(){
         const resend = new ResendAction();
         this.actionHandler = resend.request.bind(resend);

@@ -62,8 +62,21 @@ type Classroom {
         emailVerified:Boolean
     }
 
+ type Event{
+        _id:ID!
+        title:String
+        type:String
+        classroom:Classroom
+        startDate:String
+        endDate:String
+        description:String
+        color:String
+        progress:Int
+    }
+
 
   type Query {
+  getDayEvents(date:String!):[Event]
    getClassroom(classroomId: ID!): Classroom
   getClassrooms(teacherId: ID!): [Classroom]
   getClassroomTopics(classroomId: ID!): [Topic]

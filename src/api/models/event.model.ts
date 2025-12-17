@@ -14,6 +14,10 @@ const eventSchema = new mongoose.Schema(
       default: "",
       maxlength: 500,
     },
+     color: {
+      type: String,
+      
+    },
 
     startDate: {
       type: Date,
@@ -26,8 +30,9 @@ const eventSchema = new mongoose.Schema(
 
     type: {
       type: String,
-      enum: ["class", "exam", "assignment", "meeting", "other"],
+      enum: ["class", "exam", "assignment", "meeting","session", "other"],
       default: "class",
+      required:true
     },
 
     classroom: {
@@ -40,8 +45,7 @@ const eventSchema = new mongoose.Schema(
     topic: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Topic",
-      default: null,
-      index: true,
+    
     },
 
     createdBy: {
@@ -49,6 +53,7 @@ const eventSchema = new mongoose.Schema(
       ref: "User",
       required: true,
     },
+     progress: { type: Number, min: 0, max: 100, default: 0 },
   },
   {
     timestamps: true,

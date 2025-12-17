@@ -2,8 +2,7 @@ import { create } from "zustand";
 import { request } from "../services/api/request";
 import { ZodError } from "zod";
 import { parseZodErrors } from "../errors/utils";
-import { toast } from 'sonner';
-
+import { toast } from "sonner";
 
 interface FormState {
   inputs: Record<string, any | any[]>;
@@ -11,6 +10,7 @@ interface FormState {
   name: string;
 
   loading: boolean;
+  setFormFields: (fields: any) => void;
   /* setForm: (data:Partial<FormState>) => void; */
   setValue: (key: string, value: any) => void;
   setError: (key: string, value: string) => void;
@@ -28,29 +28,23 @@ const useFormStore = create<FormState>((set, get) => ({
   errors: {},
   loading: false,
   submitState: {},
-  submit: async ({ url, method }, schema, onSuccess) => {
 
+  setFormFields: (fields) => set({ inputs: fields }),
+  submit: async ({ url, method }, schema, onSuccess) => {
     const state = get();
     set({ loading: true, errors: {} });
 
     try {
-      /**client validations */
       if (schema) {
         const parsed = schema.safeParse(state.inputs);
 
         if (!parsed.success) {
-          //console.log("Errores de proyecto:", parsed.error);
-            const errs = parseZodErrors(parsed.error)
-        
-            
-
-          set({ errors:errs  ,loading:false});
+          console.log("Errores de proyecto:", parsed.error);
+          const errs = parseZodErrors(parsed.error);
+          set({ errors: errs, loading: false });
           return;
         }
       }
-      /**
-       * server request
-       */
 
       const response = await request({
         url,
@@ -60,22 +54,17 @@ const useFormStore = create<FormState>((set, get) => ({
 
       if (!response.success) {
         set({ loading: false, errors: response.errors });
-        throw new Error("errors")
+        throw new Error("errors");
       }
-      
+
       if (onSuccess) onSuccess(response);
     } catch (error) {
-       
       console.log(error);
-       toast.error('Algo salió mal');
-      set({loading:false})
+      toast.error("Algo salió mal");
+      set({ loading: false });
     }
   },
 
-  /*  setForm: (data) => set((state)=>({
-        ...state,
-        ...data
-    })), */
   resetForm: () =>
     set((state) => ({
       inputs: {},

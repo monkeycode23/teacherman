@@ -9,6 +9,8 @@ import CallendarPage from "./pages/CallendarPage";
 import NotificationsPage from "./pages/NotificationsPage";
 import { BrowserRouter, Routes, Route } from "react-router";
 
+import  CalendarPage  from './pages/CalendarPage';
+
 import GeneralLayout from "./pages/layouts/GeneralLayout";
 import { EventsPage } from "./pages/EventsPage";
 import PrivateRoute from "./components/PrivateRoute";
@@ -36,7 +38,7 @@ function App() {
           </Route>
           <Route
             path="callendar"
-            element={<CallendarPage></CallendarPage>}
+            element={<CalendarPage/>}
           ></Route>
           <Route
             path="notifications"

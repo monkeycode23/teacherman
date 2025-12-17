@@ -1,6 +1,14 @@
 import { useEffect, useState } from "react";
 import { Classroom } from "../types/general";
-import { Plus, BookOpen, Users, MoreVertical, Trash2 } from "lucide-react";
+import {
+  Plus,
+  BookOpen,
+  Users,
+  MoreVertical,
+  Trash2,
+  ArrowRight,
+} from "lucide-react";
+import { ChevronRight } from "lucide-react";
 import { Link } from "react-router";
 import CreateClassRoomModal from "../components/classroom/CreateClassRoomModal";
 import { useClassroomsStore } from "../store/classroom.store";
@@ -31,7 +39,7 @@ const GET_USER = gql`
       name
       color
       subject
-      stats{
+      stats {
         students
         topics
         assignments
@@ -64,16 +72,15 @@ export function ClassroomList() {
       });
       console.log(response, "asdassdasdasd", data);
 
-      if(data){
-
-          classRoomStore.setClassrooms(data.getClassrooms ?? []);
+      if (data) {
+        classRoomStore.setClassrooms(data.getClassrooms ?? []);
       }
     };
 
-    if(!classRoomStore.classrooms.length) fetch();
+    if (!classRoomStore.classrooms.length) fetch();
 
     return () => {};
-  }, [authStore.user,data]);
+  }, [authStore.user, data]);
 
   const onSelectClassroom = () => {};
 
@@ -93,84 +100,12 @@ export function ClassroomList() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {classRoomStore.classrooms.map((classroom) => (
-          <div
+          <ClassroomCard
             key={classroom._id}
-            className="bg-white rounded-xl shadow-sm text-white border border-gray-200 overflow-hidden hover:shadow-md transition-shadow"
-            /* style={{ backgroundColor: classroom.color }} */
-          >
-            {/*  <div
-              className="h-32 p-6 flex items-center justify-center"
-              style={{ backgroundColor: classroom.color }}
-            >
-              <BookOpen className="w-16 h-16 text-white opacity-80" />
-            </div>
-             */}
-            <div className="p-6">
-              <div className="flex items-start justify-between mb-4">
-                <div className="flex-1 min-w-0">
-                  <h3 className="text-gray-900 flex gap-2 text-lg  mb-1 truncate">
-                    <BookOpen className="  opacity-80" />
-                    {classroom.name}
-                  </h3>
-                  <p className="text-sm text-gray-600">{classroom.subject}</p>
-                </div>
-                <div className="relative">
-                  <button
-                    title="button"
-                    onClick={() =>
-                      setActiveMenu(
-                        activeMenu === classroom._id ? null : classroom._id
-                      )
-                    }
-                    className="p-2 hover:bg-gray-100 rounded-lg"
-                  >
-                    <MoreVertical className="w-5 h-5 text-gray-600" />
-                  </button>
-                  {activeMenu === classroom._id && (
-                    <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 z-10">
-                      <button
-                        onClick={() => {
-                          onDeleteClassroom(classroom._id);
-                          setActiveMenu(null);
-                        }}
-                        className="w-full flex items-center gap-2 px-4 py-2 text-red-600 hover:bg-red-50 rounded-lg"
-                      >
-                        <Trash2 className="w-4 h-4" />
-                        Eliminar Aula
-                      </button>
-                    </div>
-                  )}
-                </div>
-              </div>
-
-              <div className="flex items-center gap-4 mb-4 text-sm text-gray-600">
-                <div className="flex items-center gap-2">
-                  <Users className="w-4 h-4" />
-                  <span>{classroom.students ? classroom.students.length: 0 } estudiantes</span>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-2 gap-3 mb-4">
-                <div className="p-3 bg-gray-50 rounded-lg">
-                  <p className="text-gray-900">{classroom.students ? classroom.topics!.length :0}</p>
-                  <p className="text-xs text-gray-600">Temas</p>
-                </div>
-                <div className="p-3 bg-gray-50 rounded-lg">
-                  <p className="text-gray-900">
-                    {classroom.students ? classroom.assignments!.length:0}
-                  </p>
-                  <p className="text-xs text-gray-600">Tareas</p>
-                </div>
-              </div>
-
-              <Link
-                to={"/classrooms/" + classroom._id}
-                className="w-full px-4 py-2 bg-gray-900 text-white rounded-lg hover:bg-gray-800"
-              >
-                Ver Aula
-              </Link>
-            </div>
-          </div>
+            classroom={classroom}
+            onDeleteClassroom={onDeleteClassroom}
+            setActiveMenu={setActiveMenu}
+          ></ClassroomCard>
         ))}
       </div>
 
@@ -178,3 +113,126 @@ export function ClassroomList() {
     </div>
   );
 }
+
+const ClassroomCard = ({
+  classroom,
+  onDeleteClassroom,
+  activeMenu,
+  setActiveMenu,
+}: any) => {
+  function lightenHex(hex: string, percent: number) {
+    const num = parseInt(hex.replace("#", ""), 16);
+
+    const r = (num >> 16) & 255;
+    const g = (num >> 8) & 255;
+    const b = num & 255;
+
+    const lighten = (c: number) =>
+      Math.min(255, Math.floor(c + (255 - c) * (percent / 100)));
+
+    const newR = lighten(r);
+    const newG = lighten(g);
+    const newB = lighten(b);
+
+    return (
+      "#" +
+      ((1 << 24) + (newR << 16) + (newG << 8) + newB).toString(16).slice(1)
+    );
+  }
+
+  return (
+    <div
+      className="bg-white rounded-3xl shadow-sm text-white border border-gray-200 overflow-hidden hover:shadow-md transition-shadow"
+      style={{ backgroundColor: lightenHex(classroom.color, 10) }}
+    >
+      <div className="p-6">
+        <div className="flex items-start justify-between mb-4">
+          <div className="flex-1 ">
+            <div className="flex items-center p-0 gap-5   ">
+              <span
+                className=" rounded-xl flex items-center justify-center w-12 p-3 h-12"
+                style={{ backgroundColor: lightenHex(classroom.color, 30) }}
+              >
+                <BookOpen className="w-full h-full" />
+              </span>
+              <div>
+                <h2 className="text-lg font-bold">{classroom.name}</h2>
+                <p className="text-sm ">{classroom.subject}</p>
+              </div>
+            </div>
+          </div>
+          <div className="relative">
+            <button
+              title="button"
+              onClick={() =>
+                setActiveMenu(
+                  activeMenu === classroom._id ? null : classroom._id
+                )
+              }
+              className="p-2 hover:bg-gray-100 rounded-lg"
+            >
+              <MoreVertical className="w-5 h-5 text-white" />
+            </button>
+            {activeMenu === classroom._id && (
+              <div className="absolute right-0 mt-2 w-48 bg-black rounded-lg shadow-lg border border-gray-100 z-10">
+                <button
+                  onClick={() => {
+                    onDeleteClassroom(classroom._id);
+                    setActiveMenu(null);
+                  }}
+                  className="w-full flex items-center gap-2 px-4 py-2 text-red-600 hover:bg-red-50 rounded-lg"
+                >
+                  <Trash2 className="w-4 h-4" />
+                  Eliminar Aula
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+
+        <div className="flex items-center gap-4 mb-4 text-sm text-gray-600">
+          <div
+            className="flex items-center gap-2 rounded-xl p-3 text-white"
+            style={{ backgroundColor: lightenHex(classroom.color, 30) }}
+          >
+            <Users className="w-4 h-4" />
+            <span className="">
+              <span className="font-bold">{classroom.students ? classroom.students.length : 0}</span> estudiantes
+            </span>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-2 gap-3 mb-4">
+          <div
+            className="p-3  rounded-lg"
+            style={{ backgroundColor: lightenHex(classroom.color, 30) }}
+          >
+            <p className="text-white text-2xl font-bold">
+              {classroom.students ? classroom.topics!.length : 0}
+            </p>
+            <p className="text-xs text-white">Temas</p>
+          </div>
+          <div
+            className="p-3  rounded-lg"
+            style={{ backgroundColor: lightenHex(classroom.color, 30) }}
+          >
+            <p className="text-white text-2xl font-bold">
+              {classroom.students ? classroom.assignments!.length : 0}
+            </p>
+            <p className="text-xs text-white">Tareas</p>
+          </div>
+        </div>
+
+        <div className=" px-4 py-2 text-center bg-white text-black rounded-lg hover:bg-gray-100">
+          <Link
+            className="flex gap-2 justify-center"
+            to={"/classrooms/" + classroom._id}
+          >
+            Ver Aula
+            <ArrowRight />
+          </Link>
+        </div>
+      </div>
+    </div>
+  );
+};

@@ -5,8 +5,8 @@ import { COLORS } from "../../data/example";
 // -------------------------
 export const CreateClassRoomSchema = z.object({
   name: z.string().min(1, "El nombre es obligatorio")
-  .min(3, { message: "La contraseña debe tener al menos 3 caracteres." })
-  .max(30, { message: "La contraseña debe tener al menos 30 caracteres." })
+  .min(3, { message: "El nombre debe tener al menos 3 caracteres." })
+  .max(30, { message: "El nombre no debe tener mas de 30 caracteres." })
   .regex(/^[a-zA-Z0-9 ]+$/,"Solo caracters alhpanumericos y espacios")
   ,
   subject: z.string().min(1, "El nombre es obligatorio")

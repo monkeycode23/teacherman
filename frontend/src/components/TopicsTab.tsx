@@ -135,7 +135,7 @@ export function TopicsTab({ topics, onUpdateTopics }: TopicsTabProps) {
                       <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center text-blue-600">
                         {index + 1}
                       </div>
-                      <h3 className="text-gray-900">{topic.title}</h3>
+                      <h3 className="text-lg font-bold text-gray-800 ">{topic.title}</h3>
                     </div>
                     <p className="text-gray-600">{topic.description}</p>
 

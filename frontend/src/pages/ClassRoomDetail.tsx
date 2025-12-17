@@ -106,7 +106,7 @@ export function ClassroomDetail() {
 
         <div className="flex items-start justify-between">
           <div>
-            <h1 className="text-white mb-2">{classroom.name}</h1>
+            <h1 className="text-white text-xl font-bold mb-2">{classroom.name}</h1>
             <p className="text-white opacity-90">{classroom.subject}</p>
           </div>
           <div className="flex gap-4 text-white">

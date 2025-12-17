@@ -201,7 +201,7 @@ export function TopicSidePanel({topic,onClose}:any) {
         {/* Header */}
         <div className="p-6 border-b border-gray-200 flex items-start justify-between">
           <div>
-            <h2 className="text-gray-900 mb-1">{topic.title}</h2>
+            <h2 className="text-gray-900 mb-1 font-bold text-lg">{topic.title}</h2>
             <p className="text-gray-600">{topic.description}</p>
           </div>
           <button

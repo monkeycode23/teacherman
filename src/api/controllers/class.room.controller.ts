@@ -12,83 +12,72 @@ import { ApiResponse } from "../utils/api.response";
 import ClassroomModel from "../models/classroom.model";
 
 import { Request, Response } from "express";
+import studentModel from "../models/student.model";
 
 class ClassRoomController {
   private actionHandler: any;
 
   constructor() {}
 
-createAction() {
+  createAction() {
     return async (req: Request, res: Response, next: any) => {
-      
-        try {
-            const {name,teacher,subject,color} = req.body;
-            const classRoom = new ClassroomModel({
-                name,
-                teacher,
-                subject,
-                color
-            })
+      try {
+        const { name, teacher, subject, color } = req.body;
+        const classRoom = new ClassroomModel({
+          name,
+          teacher,
+          subject,
+          color,
+        });
 
-            await classRoom.save()
+        await classRoom.save();
 
-            
-            ApiResponse.success(res,classRoom,"class room added successfully");
-
-        } catch (error) {
-            next(error)
-        }
+        ApiResponse.success(res, classRoom, "class room added successfully");
+      } catch (error) {
+        next(error);
+      }
     };
   }
-
 
   updateAction() {
-
     return async (req: Request, res: Response, next: any) => {
       try {
-            const {name,subject,color} = req.body;
-            const {classRoomId} = req.params;
+        const { name, subject, color } = req.body;
+        const { classRoomId } = req.params;
 
-            const classRoom = await ClassroomModel.findByIdAndUpdate(classRoomId,{
-                name,
-                subject,
-                color
-            })
-            ApiResponse.success(res,classRoom,"class room updated successfully");
-
-        } catch (error) {
-            next(error)
-        }
+        const classRoom = await ClassroomModel.findByIdAndUpdate(classRoomId, {
+          name,
+          subject,
+          color,
+        });
+        ApiResponse.success(res, classRoom, "class room updated successfully");
+      } catch (error) {
+        next(error);
+      }
     };
   }
 
-
-  
   deleteAction() {
-
     return async (req: Request, res: Response, next: any) => {
       try {
-            const {classRoomId} = req.params;
-            const classRoom = await ClassroomModel.findByIdAndDelete(classRoomId);
+        const {classroomId } = req.params;
+        const classroom = await studentModel.findByIdAndDelete(classroomId)
+        if (!classroom) throw new Error("class Room not found");
 
-            if(!classRoom)throw new Error("class Room not found")
+        //TODO: sacar estudnet del aula 
+        
 
-            //TODO: eliminar  topics
-            
-            //TODO: eliminar students
+        //TODO: eliminar students
 
-            //eliminar sessiones
+        //eliminar sessiones
 
-            //eliminar tareas
+        //eliminar tareas
 
-            
-            ApiResponse.success(res,classRoom,"class room deleted successfully");
-
-        } catch (error) {
-            next(error)
-        }
+        ApiResponse.success(res, classroom, "student  deleted successfully");
+      } catch (error) {
+        next(error);
+      }
     };
   }
-
 }
 export default new ClassRoomController();

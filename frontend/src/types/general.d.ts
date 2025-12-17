@@ -1,13 +1,31 @@
 import { ClassroomStats } from "../store/classroom.store";
 
+
+// src/types/event.ts
+export type EventType = "exam" | "task" | "meeting";
+
+export interface Event {
+  _id: string;
+  title: string;
+  description: string;
+  type: EventType;
+
+  classroom: Classroom;
+  startDate: Date; // ISO
+  endDate: Date;   // ISO
+  createdAt: string;
+  updatedAt: string;
+}
 export interface Student {
   id: string;
   name: string;
-  email: string;
-  avatar: string;
-  enrollmentDate: string;
-  attendance: number;
-  averageGrade: number;
+  email?: string;
+  avatar?: string;
+  enrollmentDate?: string;
+  attendance?: number;
+  averageGrade?: number;
+  classroomId?:string
+  courseId?:string
 }
 
 export interface Comment {
@@ -165,3 +183,39 @@ export interface Topic {
 }
 
 */
+
+
+
+export interface Course {
+  id: string;
+  name: string;
+  color: string;
+}
+
+
+
+export interface ClassSchedule {
+  id: string;
+  courseId: string;
+  date: Date;
+  startTime: string;
+  endTime: string;
+}
+
+export interface Session {
+  id: string;
+  scheduleId: string;
+  courseId: string;
+  date: Date;
+  courseName: string;
+  activities: Activity[];
+  attendance: { [studentId: string]: boolean };
+}
+
+export interface Activity {
+  id: string;
+  type: 'attendance' | 'reading' | 'exercises' | 'oral_lesson' | 'custom';
+  title: string;
+  completed: boolean;
+  order: number;
+}

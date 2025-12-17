@@ -25,6 +25,8 @@ export class AuthError extends AppError {
      super(message, 401, true, data);
   }
 }
+
+
 export class JwtTokenError extends AppError {
   constructor(message = "JWT",data?:any) {
      super(message, 401, true, data);

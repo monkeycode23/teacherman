@@ -1,9 +1,11 @@
 import UserService from "../api/services/user.service";
 import { AuthService } from "../api/services/auth.service";
 import classroomModel from "../api/models/classroom.model";
+import { eventModel } from "../api/models/event.model";
 import mongoose from "mongoose";
 // authRequired.ts (middleware de resolver)
 import { GraphQLError } from "graphql";
+import { EventEmitterAsyncResource } from "nodemailer/lib/xoauth2";
 
 export const authRequired = (resolverFn: any) => {
   return async (parent: any, args: any, context: any, info: any) => {
@@ -109,37 +111,62 @@ export const resolvers = {
         return { error: error.message };
       }
     },
-     getClassroom: async (_: any, args: any) => {
+    getClassroom: async (_: any, args: any) => {
       try {
         const { classroomId } = args;
 
         //const userService = new UserService()
 
-        const classroom = await classroomModel.findById(classroomId)
-        /* .populate("topics")
+        const classroom = await classroomModel
+          .findById(classroomId)
+          /* .populate("topics")
         .populate("students")
         .populate("assignments") */
-        .populate("teacher")
+          .populate("teacher");
 
         return classroom;
       } catch (error: any) {
         return { error: error.message };
       }
     },
-    getClassroomTopics:async (_: any, args: any) => {
+    getClassroomTopics: async (_: any, args: any) => {
       try {
         const { classroomId } = args;
 
         //const userService = new UserService()
-       
-        const classroom = await classroomModel.findById(classroomId)
-        .populate({path:"topics",model:"Topic"})
 
-        if(!classroom) throw new Error("no class room found")
+        const classroom = await classroomModel
+          .findById(classroomId)
+          .populate({ path: "topics", model: "Topic" });
 
-            
+        if (!classroom) throw new Error("no class room found");
+
         return classroom.topics ?? [];
+      } catch (error: any) {
+        return { error: error.message };
+      }
+    },
 
+    getDayEvents: async (_: any, args: any) => {
+      try {
+        const { date } = args;
+        console.log(date,"fechaaaaaaaaaaaaaa!")
+        //const userService = new UserService()
+        const day = new Date(date)
+        const startOfDay = new Date(day.setHours(0, 0, 0, 0));
+        const endOfDay = new Date(day.setHours(23, 59, 59, 999));
+        console.log(startOfDay,endOfDay)
+        const events = await eventModel.find({
+          startDate: {
+            $gte: startOfDay,
+            $lte: endOfDay,
+          },
+        }).populate({path:"classroom",select:"_id name color"})
+
+        console.log(events);
+        if (!events) throw new Error("no class room found");
+
+        return events;
       } catch (error: any) {
         return { error: error.message };
       }

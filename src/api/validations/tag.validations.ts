@@ -9,15 +9,15 @@ export const    createClassRoomValidationRules = [
     .withMessage("El nombre es obligatorio")
     .isLength({ min: 3 })
     .withMessage("El nombre debe tener al menos 3 caracteres")
-    .isLength({ max: 15 })
-    .withMessage("El nombre debe tener al menos 15 caracteres"),
+    .isLength({ max: 30 })
+    .withMessage("El nombre no debe tener mas de 30 caracteres"),
      body("subject")
     .notEmpty()
     .withMessage("El nombre es obligatorio")
     .isLength({ min: 3 })
     .withMessage("El nombre debe tener al menos 3 caracteres")
-    .isLength({ max: 15 })
-    .withMessage("El nombre debe tener al menos 15 caracteres"),
+    .isLength({ max: 30 })
+    .withMessage("El nombre no  debe tener mas de 15 caracteres"),
     
     body("color")
       .notEmpty()
