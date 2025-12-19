@@ -26,7 +26,10 @@ import { useAuthStore } from "../store/auth.store";
  */
 
 interface GetClassroomsResponse {
-  getClassrooms: Classroom[];
+  getClassrooms: {
+    pagination:any
+    data:Classroom[]
+  };
 }
 
 interface GetClassroomsVars {
@@ -35,7 +38,15 @@ interface GetClassroomsVars {
 const GET_USER = gql`
   query getClassrooms($teacherId: ID!) {
     getClassrooms(teacherId: $teacherId) {
-      _id
+        pagination{
+            page
+            limit
+            totalPages
+            total
+            skip
+        }
+      data{
+        _id
       name
       color
       subject
@@ -43,6 +54,7 @@ const GET_USER = gql`
         students
         topics
         assignments
+      }
       }
     }
   }
@@ -59,11 +71,14 @@ export function ClassroomList() {
   const [_user, { data, loading, error }] = useLazyQuery<
     GetClassroomsResponse,
     GetClassroomsVars
-  >(GET_USER);
+  >(GET_USER,{
+    fetchPolicy: "network-only", // 🔥
+  });
 
   const authStore = useAuthStore();
 
   useEffect(() => {
+    
     if (!authStore.user) return;
 
     const fetch = async () => {
@@ -73,13 +88,16 @@ export function ClassroomList() {
       console.log(response, "asdassdasdasd", data);
 
       if (data) {
-        classRoomStore.setClassrooms(data.getClassrooms ?? []);
+        classRoomStore.setClassrooms(data.getClassrooms.data ?? []);
       }
     };
 
     if (!classRoomStore.classrooms.length) fetch();
 
-    return () => {};
+    return () => {
+
+        console.log("asdasdas")
+    };
   }, [authStore.user, data]);
 
   const onSelectClassroom = () => {};
@@ -197,7 +215,7 @@ const ClassroomCard = ({
           >
             <Users className="w-4 h-4" />
             <span className="">
-              <span className="font-bold">{classroom.students ? classroom.students.length : 0}</span> estudiantes
+              <span className="font-bold">{classroom.stats.students}</span> estudiantes
             </span>
           </div>
         </div>
@@ -208,7 +226,7 @@ const ClassroomCard = ({
             style={{ backgroundColor: lightenHex(classroom.color, 30) }}
           >
             <p className="text-white text-2xl font-bold">
-              {classroom.students ? classroom.topics!.length : 0}
+              {classroom.stats.topics }
             </p>
             <p className="text-xs text-white">Temas</p>
           </div>
@@ -217,7 +235,7 @@ const ClassroomCard = ({
             style={{ backgroundColor: lightenHex(classroom.color, 30) }}
           >
             <p className="text-white text-2xl font-bold">
-              {classroom.students ? classroom.assignments!.length : 0}
+              { classroom.stats.assignments}
             </p>
             <p className="text-xs text-white">Tareas</p>
           </div>

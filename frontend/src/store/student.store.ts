@@ -42,14 +42,14 @@ export const useStudentsStore = create<StudentState>((set, get) => ({
   updateStudent: (id, data) => {
     set((state) => ({
       students: state.students.map((r) =>
-        r.id === id ? { ...r, ...data } : r
+        r._id === id ? { ...r, ...data } : r
       ),
     }));
   },
 
   removeStudent: (id) => {
     set((state) => ({
-      students: state.students.filter((r) => r.id !== id),
+      students: state.students.filter((r) => r._id !== id),
     }));
   },
 

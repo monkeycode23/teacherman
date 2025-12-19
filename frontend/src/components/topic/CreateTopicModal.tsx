@@ -22,6 +22,7 @@ export default function CreateTopicModal({ first }: { first?: boolean }) {
 const classroomStore = useClassroomsStore();
   useEffect(() => {
 
+    console.log(classroomStore.classroom)
     if(!classroomStore.classroom) return;
     if (!authStore.user) return;
 
@@ -37,6 +38,11 @@ const classroomStore = useClassroomsStore();
 
   const handleAddTopic = (e: React.FormEvent) => {
     e.preventDefault();
+
+    if(!classroomStore.classroom){
+        toast.error("Error no hay classroom")
+        return 
+    }
 
     formStore.submit(
       {

@@ -8,7 +8,7 @@ import studentRoutes from "./student.routes"
 import resourceRoutes from './resource.routes'
 import questionRoutes from './question.routes'
 import quizzRoutes from './quiz.routes'
-
+import sessionRoutes from './session.routes'
 const apiRouter = Router();
 
 // Aquí montamos todos los routers secundarios
@@ -22,7 +22,7 @@ apiRouter.use("/resources", resourceRoutes);
 apiRouter.use("/questions", questionRoutes);
 apiRouter.use("/quizzes", quizzRoutes);
 
-
+apiRouter.use("/sessions", sessionRoutes);
 
 
 export default apiRouter;

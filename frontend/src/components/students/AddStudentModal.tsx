@@ -4,24 +4,28 @@ import Modal from "../Modal";
 import useFormStore from "../../store/form.store";
 import { useAuthStore } from "../../store/auth.store";
 import { CreateStudentSchema } from "../../errors/schemas/student.schema";
-
+import { useClassroomsStore } from "../../store/classroom.store";
 import { Plus } from "lucide-react";
-
+import { useStudentsStore } from "../../store/student.store";
 /**cmponent */
 const AddStudentModal = () => {
   const [showAddStudent, setShowAddStudent] = useState(false);
 
   const formStore = useFormStore();
   const authStore = useAuthStore();
-
+    const classRoomStore = useClassroomsStore()
+    const studentStore = useStudentsStore()
   // siii un store para los formularios
 
   useEffect(() => {
     if (!authStore.user) return;
+    if(!classRoomStore.classroom) return 
+
     formStore.loading = false;
     formStore.setValue("names", "");
     formStore.setValue("lastname", "");
     formStore.setValue("email", "");
+    formStore.setValue("classroomId", classRoomStore.classroom._id);
   }, []);
 
   const handleAddStudent = async (e: React.FormEvent) => {
@@ -29,7 +33,8 @@ const AddStudentModal = () => {
     const student: Student = {
       id: Date.now().toString(),
       ...newStudent,
-      avatar: `https://images.unsplash.com/photo-${1500000000000 + Math.floor(Math.random() * 100000000000)}?w=100&h=100&fit=crop`,
+      avatar: 
+      `https://images.unsplash.com/photo-${1500000000000 + Math.floor(Math.random() * 100000000000)}?w=100&h=100&fit=crop`,
       enrollmentDate: new Date().toISOString().split('T')[0],
       attendance: 100,
       averageGrade: 0,
@@ -47,11 +52,9 @@ const AddStudentModal = () => {
       },
       CreateStudentSchema,
       (data: any) => {
-        /*  console.log("class",data)
-             classRoomStore.createClassroom({
-              ...data.data,
-            });                                 
-            setShowAddModal(false); */
+          console.log("class",data)
+            studentStore.addStudent(data.data)
+            setShowAddStudent(false); 
             console.log(data,"asdasdasd")
       }
     );
@@ -80,7 +83,7 @@ const AddStudentModal = () => {
                 onChange={(e) => formStore.setValue("names", e.target.value)}
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 placeholder="ej. Juan Pérez"
-                required
+               
               />
                {formStore.errors["names"] && (
                 <p className="text-red-600"> {formStore.errors["names"]}</p>
@@ -97,7 +100,7 @@ const AddStudentModal = () => {
                 onChange={(e) => formStore.setValue("lastname", e.target.value)}
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 placeholder="ej. Juan Pérez"
-                required
+             
               />
                {formStore.errors["lastname"] && (
                 <p className="text-red-600"> {formStore.errors["lastname"]}</p>

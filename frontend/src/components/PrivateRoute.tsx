@@ -12,8 +12,8 @@ import { jwtDecode } from "jwt-decode";
 import { useAuthStore } from "../store/auth.store";
 
  const GET_USER = gql`
-  query getUser($userId: ID!) {
-    user(userId: $userId) {
+  query getAuthUser($userId: ID!) {
+    getAuthUser(userId: $userId) {
       _id
       username
       email
@@ -45,7 +45,7 @@ const PrivateRoute = () => {
         variables: { userId },
       });
 
-      useAuthStore.setState({ user: response.data.user });
+      useAuthStore.setState({ user: response.data.getAuthUser });
       console.log(response, "user fetched");  
     };
 

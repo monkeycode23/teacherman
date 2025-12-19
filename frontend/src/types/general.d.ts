@@ -17,8 +17,9 @@ export interface Event {
   updatedAt: string;
 }
 export interface Student {
-  id: string;
-  name: string;
+  _id: string;
+  names: string;
+  lastname:string;
   email?: string;
   avatar?: string;
   enrollmentDate?: string;
@@ -203,19 +204,23 @@ export interface ClassSchedule {
 }
 
 export interface Session {
-  id: string;
-  scheduleId: string;
-  courseId: string;
-  date: Date;
-  courseName: string;
+  _id: string;
+  startTime: string;
+  endTime: string;
+  classroom?: Classroom;
+  sessionDate: Date;
+  title?: string;
+  status:string;
+  progress?:number;
   activities: Activity[];
-  attendance: { [studentId: string]: boolean };
+  attendance?: { [studentId: string]: boolean };
 }
 
 export interface Activity {
-  id: string;
+  _id: string;
   type: 'attendance' | 'reading' | 'exercises' | 'oral_lesson' | 'custom';
   title: string;
   completed: boolean;
   order: number;
+  progress:number
 }

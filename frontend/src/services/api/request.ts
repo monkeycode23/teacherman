@@ -5,6 +5,7 @@ import { useAuthStore } from "../../store/auth.store";
 // CONFIG BASE
 // =========================
 
+export type TRequestMethod = "GET" | "POST" | "PUT" | "DELETE";
 // Usa la variable de entorno si existe, si no usa localhost
 const API_BASE_URL = /* import.meta.env.VITE_API_URL ||  */"http://localhost:2567/api";
 
@@ -90,7 +91,7 @@ api.interceptors.response.use(
 
 
 interface RequestOptions<T = any> {
-  method?: "GET" | "POST" | "PUT" | "DELETE";
+  method?:TRequestMethod 
   url: string;
   data?: T;
   params?: Record<string, any>;

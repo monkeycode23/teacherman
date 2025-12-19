@@ -1,86 +1,47 @@
 import { gql } from "graphql-tag";
+import { userQueries,UsertypeDefs } from "./types/user.types";
+import { ClassroomtypeDefs,classroomQueries } from "./types/classroom.types";
+import { studentQueries,studenttypeDefs } from "./types/syudent.types";
+import { topicQueries,topictypeDefs } from "./types/topics.types";
+import { SessiontypeDefs,SessionQueries } from "./types/session.types";
+
+
+
+ 
+
+
 
 export const typeDefs = gql`
 
-type Tag {
+type Query
+
+ type Pagination {
+    totalPages: Int
+    page: Int
+    skip: Int
+    limit: Int
+    total:Int
+  }
+
+    type Tag {
     _id: ID!
     name: String!
-    color:String
-    icon:String
-    text:String
-    
-    
+    color: String
+    icon: String
+    text: String
   }
 
-  type Topic {
-    _id: ID!
-    title: String!
-    description:String
-    comments:[String]
-    resources:[String]
-    quizzes:[String]
-    events:[String]
-    text:String
-    
-    
-  }
-  type Teacher {
-  _id: ID!
-  fullname:String
-    user: ID!
+    ${UsertypeDefs}
+    ${ClassroomtypeDefs}
+    ${studenttypeDefs}
+    ${topictypeDefs}
+    ${SessiontypeDefs}
+ 
+
+  ${userQueries}
+  ${classroomQueries}
+  ${studentQueries}
+  ${topicQueries}
+  ${SessionQueries}
   
-  }
-
-
-  type ClassroomStats {
-    topics:Int
-    assignments:Int
-    students:Int
-  }
-type Classroom {
-    _id: ID!
-    name: String
-    description: String
-    tags:[Tag]
-    subject:String
-    teacher:Teacher
-    color:String
-    students:[String]
-    topics:[String]
-    assignments:[String]
-    stats:ClassroomStats
-    }
-
-
-    type User{
-        _id:ID!
-        avatar:String
-        username:String
-        email:String
-        passwordHash:String
-        roles:[String]
-        emailVerified:Boolean
-    }
-
- type Event{
-        _id:ID!
-        title:String
-        type:String
-        classroom:Classroom
-        startDate:String
-        endDate:String
-        description:String
-        color:String
-        progress:Int
-    }
-
-
-  type Query {
-  getDayEvents(date:String!):[Event]
-   getClassroom(classroomId: ID!): Classroom
-  getClassrooms(teacherId: ID!): [Classroom]
-  getClassroomTopics(classroomId: ID!): [Topic]
-  user(userId:ID!):User
-  }
-
 `;

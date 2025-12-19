@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Classroom } from '../types/general';
-import { ArrowLeft, Users, BookOpen, ClipboardList, BarChart3, } from 'lucide-react';
+import { ArrowLeft, Users, BookOpen, ClipboardList, BarChart3, GraduationCap, PenTool, Cog, } from 'lucide-react';
 import { TopicsTab } from '../components/TopicsTab';
 import { StudentsTab} from '../components/StudentsTab';
 import { AssignmentsTab } from '../components/AssignmentsTab';
@@ -10,6 +10,7 @@ import { useClassroomsStore } from '../store/classroom.store';
 import { classrooms } from '../data/example';
 import { gql } from "@apollo/client";
 import { useQuery, useLazyQuery } from "@apollo/client/react";
+import { SessionsTab } from '../components/SessionsTab';
 interface ClassroomDetailProps {
   classroom: Classroom;
   onBack: () => void;
@@ -173,7 +174,7 @@ export function ClassroomDetail() {
                 : 'border-transparent text-gray-600 hover:text-gray-900'
             }`}
           >
-            <BarChart3 className="w-5 h-5" />
+            <GraduationCap className="w-5 h-5" />
             Sesiones
           </button>
 
@@ -197,7 +198,7 @@ export function ClassroomDetail() {
                 : 'border-transparent text-gray-600 hover:text-gray-900'
             }`}
           >
-            <BarChart3 className="w-5 h-5" />
+            <Cog className="w-5 h-5" />
             Config
           </button>
         </div>
@@ -214,6 +215,13 @@ export function ClassroomDetail() {
         
         {activeTab === 'students' && (
           <StudentsTab
+            students={classroom.students}
+            onUpdateStudents={(student:any) => onUpdate({ student })}
+          />
+        )}
+
+         {activeTab === 'sessions' && (
+          <SessionsTab
             students={classroom.students}
             onUpdateStudents={(student:any) => onUpdate({ student })}
           />

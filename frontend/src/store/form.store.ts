@@ -1,8 +1,9 @@
 import { create } from "zustand";
-import { request } from "../services/api/request";
+import { request,TRequestMethod } from "../services/api/request";
 import { ZodError } from "zod";
 import { parseZodErrors } from "../errors/utils";
 import { toast } from "sonner";
+
 
 interface FormState {
   inputs: Record<string, any | any[]>;
@@ -30,6 +31,8 @@ const useFormStore = create<FormState>((set, get) => ({
   submitState: {},
 
   setFormFields: (fields) => set({ inputs: fields }),
+
+
   submit: async ({ url, method }, schema, onSuccess) => {
     const state = get();
     set({ loading: true, errors: {} });

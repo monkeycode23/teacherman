@@ -1,5 +1,26 @@
 import mongoose from "mongoose";
 import studentModel from "./student.model";
+
+
+
+
+const inscriptionSchema = new mongoose.Schema(
+  {
+    student: {
+      type: mongoose.Types.ObjectId,
+      ref: "Student",
+      required: true,
+    },
+    date: {
+      type: Date,
+      default: Date.now,
+    },
+  },
+  {
+    _id: false, // opcional (no crea _id por cada inscripción)
+  }
+);
+
 const classroomSchema = new mongoose.Schema(
   {
     name: { type: String, required: true },
@@ -19,15 +40,20 @@ const classroomSchema = new mongoose.Schema(
       },
     },
 
-    inscriptions: [
+   inscriptions: {
+    type: [inscriptionSchema],
+    default: [],
+  },
+
+     averages: [
       {
         student: {
           type: mongoose.Schema.Types.ObjectId,
           ref: "Student",
         },
-        date: {
-          type: Date,
-          default: Date.now(),
+        average: {
+          type: Number,
+          default: 0,
         },
       },
     ],
@@ -43,7 +69,10 @@ const classroomSchema = new mongoose.Schema(
     ],
     assignments: [{ type: mongoose.Schema.Types.ObjectId, ref: "Assignment" }],
     topics: [{ type: mongoose.Schema.Types.ObjectId, ref: "Topic" }],
-    students: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
+    
+     sessions: [{ type: mongoose.Schema.Types.ObjectId, ref: "ClassSession" }],
+    
+    students: [{ type: mongoose.Schema.Types.ObjectId, ref: "Student" }],
 
     events: [{ type: mongoose.Schema.Types.ObjectId, ref: "Event" }],
 

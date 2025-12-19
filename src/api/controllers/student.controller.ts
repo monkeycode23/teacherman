@@ -28,28 +28,28 @@ class StudentController {
   createAction() {
     return async (req: Request, res: Response, next: any) => {
       try {
-        const { names, lastname, classroomId, studentId,inscription } = req.body;
+        const { names, lastname, classroomId, inscription } = req.body;
 
         const classroom = await classroomModel.findById(classroomId);
 
+        console.log(req.body)
         if (!classroom) throw new ValidationError("Class room not found ");
 
         let student;
 
-        if (!studentId) {
+    
           //generar codigo para entrar aula
           //si es un studiante nuevo crearlo
           const code = StudentService.generateCode();
+          
+          
           student = new StudentModel({
             names,
             lastname,
             code,
+            classroom:classroomId
           });
-        } else {
-          //si no buscarlo 
-          student = await studentModel.findById(studentId);
-          if (!student) throw new ValidationError("student not found ");
-        }
+       
 
         //agregarlo al classrom
         classroom.students.push(student._id);
@@ -69,7 +69,7 @@ class StudentController {
       } catch (error) {
         next(error);
       }
-      res.send("Project Created");
+      
     };
   }
 
@@ -90,16 +90,18 @@ class StudentController {
       try {
         const { studentId, classroomId } = req.params;
 
-        const classroom = await classroomModel.findByIdAndDelete(classroomId);
+        const classroom = await classroomModel.findById(classroomId);
         if (!classroom) throw new Error("class Room not found");
 
         /*  const student = await StudentModel.findByIdAndDelete(studentId);
         if (!student) throw new Error("class Room not found"); */
 
         //TODO: sacar estudnet del aula
-        classroom.students.filter((student) => {
+        classroom.students = classroom.students.filter((student) => {
           return String(student._id) != studentId;
         });
+       
+        classroom.inscriptions = classroom.inscriptions.pull({ student: studentId });
         
         await classroom.save();
 
